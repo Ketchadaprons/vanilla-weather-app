@@ -6,6 +6,8 @@ function displayTemperature(response) {
   let humidity = response.data.temperature.humidity;
   let wind = Math.round(response.data.wind.speed);
   let description = response.data.condition.description;
+  let icon = response.data.condition.icon;
+  //   console.log(response.data.condition.icon);
 
   let temp = document.querySelector("#temperature");
   temp.innerHTML = roundTemp;
@@ -18,10 +20,16 @@ function displayTemperature(response) {
 
   let displayDescription = document.querySelector("#description");
   displayDescription.innerHTML = description;
+
+  let displayIcon = document.querySelector("#icon");
+  displayIcon.setAttribute(
+    "src",
+    `http://shecodes-assets.s3.amazonaws.com/api/weather/icons/${icon}.png`
+  );
 }
 
 let apiKey = "331a83f170c6f2e4ef360t13b388b6bo";
-let cityName = "new york";
+let cityName = "texas";
 let apiUrl = `https://api.shecodes.io/weather/v1/current?query=${cityName}&key=${apiKey}&units=metric`;
 
 axios.get(apiUrl).then(displayTemperature);
