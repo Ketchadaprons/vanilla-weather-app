@@ -7,7 +7,11 @@ function displayTemperature(response) {
   let wind = Math.round(response.data.wind.speed);
   let description = response.data.condition.description;
   let icon = response.data.condition.icon;
+  let cityName = response.data.city;
   //   console.log(response.data.condition.icon);
+
+  let displayCity = document.querySelector("#cityName");
+  displayCity.innerHTML = cityName;
 
   let temp = document.querySelector("#temperature");
   temp.innerHTML = roundTemp;
@@ -28,11 +32,24 @@ function displayTemperature(response) {
   );
 }
 
-let apiKey = "331a83f170c6f2e4ef360t13b388b6bo";
-let cityName = "texas";
-let apiUrl = `https://api.shecodes.io/weather/v1/current?query=${cityName}&key=${apiKey}&units=metric`;
+// search function and get api weather
 
-axios.get(apiUrl).then(displayTemperature);
+function search(event) {
+  event.preventDefault();
+  let searchCity = document.querySelector("#search-text-input");
+  let cityName = searchCity.value;
+  console.log(searchCity.value);
+  //   let displayCityName = document.querySelector("#city");
+  //   displayCityName.innerHTML = cityName;
+
+  let apiKey = "331a83f170c6f2e4ef360t13b388b6bo";
+  let apiUrl = `https://api.shecodes.io/weather/v1/current?query=${cityName}&key=${apiKey}&units=metric`;
+
+  axios.get(apiUrl).then(displayTemperature);
+}
+
+let form = document.querySelector("#search-form");
+form.addEventListener("submit", search);
 
 // get current date and time
 
