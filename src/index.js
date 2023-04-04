@@ -2,7 +2,11 @@
 
 function displayTemperature(response) {
   console.log(response);
-  let roundTemp = Math.round(response.data.temperature.current);
+
+  celsiusTemperature = response.data.temperature.current;
+  console.log(celsiusTemperature);
+
+  let roundTemp = Math.round(celsiusTemperature);
   let humidity = response.data.temperature.humidity;
   let wind = Math.round(response.data.wind.speed);
   let description = response.data.condition.description;
@@ -34,22 +38,54 @@ function displayTemperature(response) {
 
 // search function and get api weather
 
-function search(event) {
-  event.preventDefault();
-  let searchCity = document.querySelector("#search-text-input");
-  let cityName = searchCity.value;
-  console.log(searchCity.value);
-  //   let displayCityName = document.querySelector("#city");
-  //   displayCityName.innerHTML = cityName;
-
+function search(city) {
   let apiKey = "331a83f170c6f2e4ef360t13b388b6bo";
-  let apiUrl = `https://api.shecodes.io/weather/v1/current?query=${cityName}&key=${apiKey}&units=metric`;
+  //   let city = "chicago";
+  let apiUrl = `https://api.shecodes.io/weather/v1/current?query=${city}&key=${apiKey}&units=metric`;
 
   axios.get(apiUrl).then(displayTemperature);
 }
 
+function handleSubmit(event) {
+  event.preventDefault();
+  let searchCity = document.querySelector("#search-text-input");
+  search(searchCity.value);
+
+  //   console.log(searchCity.value);
+}
+
+// convert fahrenheit
+
+function displayFahrenheitTemperature(event) {
+  event.preventDefault();
+  let temperatureElement = document.querySelector("#temperature");
+
+  celsiusLink.classList.remove("active");
+  fahrenheitLink.classList.add("active");
+  let fahrenheiTemperature = (celsiusTemperature * 9) / 5 + 32;
+  temperatureElement.innerHTML = Math.round(fahrenheiTemperature);
+}
+
+function displayCelsiusTemperature(event) {
+  event.preventDefault();
+  celsiusLink.classList.add("active");
+  fahrenheitLink.classList.remove("active");
+  let temperatureElement = document.querySelector("#temperature");
+  temperatureElement.innerHTML = Math.round(celsiusTemperature);
+}
+
+let celsiusTemperature = null;
+
 let form = document.querySelector("#search-form");
-form.addEventListener("submit", search);
+form.addEventListener("submit", handleSubmit);
+
+let fahrenheitLink = document.querySelector("#fahrenheit-link");
+fahrenheitLink.addEventListener("click", displayFahrenheitTemperature);
+
+let celsiusLink = document.querySelector("#celsius-link");
+celsiusLink.addEventListener("click", displayCelsiusTemperature);
+
+search("New York");
 
 // get current date and time
 
